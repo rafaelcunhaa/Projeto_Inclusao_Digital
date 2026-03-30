@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Plataforma de Inclusão Digital</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">Inclusão Digital</div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+    <nav id="mainNav">
+        <a href="index.html">Início</a>
+        <a href="curso.html">Cursos</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="rede_social.html">Rede Social</a>
+        <a href="perfil.html">Meu Perfil</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
+</header>
+
+<section class="perfil-container">
+    <div class="perfil-header">
+        <div class="perfil-card">
+            <div class="avatar-wrapper">
+                <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="Avatar" class="avatar">
+            </div>
+            <div class="perfil-info">
+                <h1 id="userName">Carregando...</h1>
+                <p id="userEmail" class="text-muted">--</p>
+                <div class="perfil-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="cursosCompletos">0</span>
+                        <span class="stat-label">Cursos Completos</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="progressoTotal">0%</span>
+                        <span class="stat-label">Progresso Geral</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="horasEstudo">0h</span>
+                        <span class="stat-label">Horas de Estudo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="perfil-content">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> / <span>Meu Perfil</span>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="cursos">Meus Cursos</button>
+            <button class="tab-btn" data-tab="configuracoes">Configurações</button>
+        </div>
+
+        <div class="tab-content active" id="cursos-tab">
+            <h2>Progresso nos Cursos</h2>
+            <div class="cursos-progress" id="cursosProgress">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="configuracoes-tab">
+            <h2>Configurações da Conta</h2>
+            <form id="settingsForm" class="settings-form">
+                <div class="form-group">
+                    <label for="fullName">Nome Completo</label>
+                    <input type="text" id="fullName" placeholder="Seu nome completo">
+                </div>
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" placeholder="Conte um pouco sobre você"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tema</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="theme" value="light"> Claro</label>
+                        <label><input type="radio" name="theme" value="dark"> Escuro</label>
+                        <label><input type="radio" name="theme" value="auto" checked> Automático</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Salvar Configurações</button>
+            </form>
+            <hr style="margin: 30px 0;">
+            <h3>Segurança</h3>
+            <button id="logoutBtn" class="btn" style="background-color: #dc2626; width: 100%;">Sair da Conta</button>
+        </div>
+    </div>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<footer>
+    <p>Projeto de Extensão - Tecnologia para um Futuro Sustentável</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="notifications.js"></script>
+
+<script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    menuToggle.addEventListener('click', () => mainNav.classList.toggle('show'));
+
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+
+    // Carregar tema salvo
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = '☀️';
+    }
+
+    onAuthStateChanged((user) => {
+        if (!user) {
+            showToast('Você precisa estar logado para acessar o perfil.', 'error');
+            window.location = 'index.html';
+            return;
+        }
+
+        loadUserProfile(user);
+        loadUserCourses(user.uid);
+        loadSettings(user);
+    });
+
+    function loadUserProfile(user) {
+        document.getElementById('userName').textContent = user.email.split('@')[0];
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userAvatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`;
+    }
+
+    function loadUserCourses(userId) {
+        getAllUserProgress(userId).then((snapshot) => {
+            const container = document.getElementById('cursosProgress');
+            container.innerHTML = '';
+
+            if (snapshot.empty) {
+                container.innerHTML = '<p style="text-align:center;color:#999;">Nenhum curso iniciado ainda.</p>';
+                return;
+            }
+
+            let totalProgress = 0;
+            let completedCount = 0;
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const progressPercent = Math.round((data.completedLessons / data.totalLessons) * 100);
+                totalProgress += progressPercent;
+                if (progressPercent === 100) completedCount++;
+
+                container.innerHTML += `
+                    <div class="progress-card">
+                        <h3>${data.courseName}</h3>
+                        <div class="progress-bar">
+                            <div class="progress-filled" style="width: ${progressPercent}%"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span>${progressPercent}% completo</span>
+                            <span>${data.completedLessons} de ${data.totalLessons} aulas</span>
+                        </div>
+                        <a href="curso.html" class="btn" style="margin-top: 10px;">Continuar</a>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cursosCompletos').textContent = completedCount;
+            document.getElementById('progressoTotal').textContent = snapshot.size > 0 ? Math.round(totalProgress / snapshot.size) + '%' : '0%';
+        });
+    }
+
+    function loadSettings(user) {
+        getUserProfileData(user.uid).then((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                document.getElementById('fullName').value = data.fullName || '';
+                document.getElementById('bio').value = data.bio || '';
+                const themeRadios = document.querySelectorAll('input[name="theme"]');
+                const savedTheme = data.theme || 'auto';
+                themeRadios.forEach(r => r.checked = r.value === savedTheme);
+            }
+        });
+    }
+
+    document.getElementById('settingsForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = getCurrentUser();
+        if (user) {
+            updateUserProfileData(user.uid, {
+                email: user.email,
+                fullName: document.getElementById('fullName').value,
+                bio: document.getElementById('bio').value,
+                theme: document.querySelector('input[name="theme"]:checked').value
+            }).then(() => {
+                showToast('Configurações salvas com sucesso!', 'success');
+            }).catch(err => showToast('Erro ao salvar: ' + err.message, 'error'));
+        }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        logoutFirebase().then(() => {
+            showToast('Desconectado com sucesso.', 'success');
+            setTimeout(() => window.location = 'index.html', 1000);
+        });
+    });
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab + '-tab').classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>

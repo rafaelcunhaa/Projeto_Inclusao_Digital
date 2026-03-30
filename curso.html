@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso - Introdução à Programação</title>
+    <link rel="stylesheet" href="curso.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">Inclusão Digital</div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+    <nav id="mainNav">
+        <a href="index.html">Voltar</a>
+        <a href="#">Meu Progresso</a>
+        <a href="rede_social.html">Rede Social</a>
+        <a href="#">Sair</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
+</header>
+
+<section class="curso-header">
+    <h1>Introdução à Programação</h1>
+    <p>Aprenda lógica de programação e seus primeiros códigos com exemplos práticos.</p>
+    <div class="progresso">
+        <span>Progresso: <strong id="progressText">40%</strong></span>
+        <div class="barra">
+            <div class="barra-preenchida" id="progressBar" style="width: 40%;"></div>
+        </div>
+    </div>
+</section>
+
+<section class="conteudo">
+    <aside class="modulos">
+        <h2>Módulos</h2>
+        <ul id="moduleList"></ul>
+    </aside>
+
+    <main class="aula">
+        <div class="video">
+            <p>Vídeo de demonstração</p>
+        </div>
+        <div class="descricao" id="lessonContent">
+            <h3>Aula 1 - O que é programação?</h3>
+            <p>Programação é criar instruções que o computador executa. Vamos iniciar com conceitos principais e exemplos simples em JavaScript.</p>
+            <button id="nextBtn">Próximo módulo</button>
+        </div>
+    </main>
+</section>
+
+<section class="testimonials" style="padding-bottom: 30px;">
+    <h2 class="section-title">O que nossos alunos dizem</h2>
+    <div class="testimonials-grid">
+        <div class="testimonial-card"><p>"Pude entender a lógica de forma prática, muito fácil de seguir."</p><div class="author">- Lucas</div></div>
+        <div class="testimonial-card"><p>"Professores atenciosos e conteúdo objetivo, ótima plataforma!"</p><div class="author">- Ana</div></div>
+    </div>
+</section>
+
+<footer>
+    <p>Projeto de Extensão - Tecnologia para um Futuro Sustentável</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="notifications.js"></script>
+
+<script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    menuToggle.addEventListener('click', () => mainNav.classList.toggle('show'));
+
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = '☀️';
+    }
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+
+    let currentUser = null;
+
+    // Esconde a página durante a checagem de auth para não exibir conteúdo antes da validação
+    document.body.classList.add('auth-checking');
+
+    function checkAuthAndLoadCourse() {
+        const localLogged = localStorage.getItem('loggedInUser');
+        if (localLogged) {
+            currentUser = { uid: localLogged, email: localLogged };
+            loadUserProgress(currentUser.uid);
+            document.body.classList.remove('auth-checking');
+            return;
+        }
+
+        onAuthStateChanged((user) => {
+            if (!user) {
+                showToast('Você não está logado. Faça login para continuar.', 'error');
+                setTimeout(() => window.location = 'index.html', 800);
+                return;
+            }
+            currentUser = user;
+            loadUserProgress(user.uid);
+            document.body.classList.remove('auth-checking');
+        });
+    }
+
+    checkAuthAndLoadCourse();
+
+    // Sincronizar mudanças de autenticação (para localStorage fallback)
+    window.addEventListener('authChanged', checkAuthAndLoadCourse);
+
+    const modules = [
+        { title: 'O que é programação?', text: 'Introdução, lógica básica e exemplos.' },
+        { title: 'Lógica e Algoritmos', text: 'Fluxogramas, pseudocódigo e decisões.' },
+        { title: 'Variáveis e Tipos', text: 'Armazenamento de dados em JavaScript.' },
+        { title: 'Funções e Estruturas', text: 'Reuso de código e blocos de controle.' },
+    ];
+
+    const moduleList = document.getElementById('moduleList');
+    const lessonContent = document.getElementById('lessonContent');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+
+    let activeIndex = 0;
+
+    function renderModules() {
+        moduleList.innerHTML = modules.map((module, i) => {
+            const active = i === activeIndex ? 'ativo' : '';
+            return `<li class="${active}" data-index="${i}">${module.title}</li>`;
+        }).join('');
+
+        const items = document.querySelectorAll('.modulos li');
+        items.forEach(item => item.addEventListener('click', (e) => {
+            activeIndex = Number(e.currentTarget.dataset.index);
+            updateLesson();
+        }));
+    }
+
+    function updateLesson() {
+        const current = modules[activeIndex];
+        lessonContent.innerHTML = `
+            <h3>Aula ${activeIndex + 1} - ${current.title}</h3>
+            <p>${current.text}</p>
+            <p>Exercício: explique com suas palavras o conceito principal e pratique num editor online.</p>
+            <button id="nextBtn">${activeIndex < modules.length - 1 ? 'Próximo módulo' : 'Finalizar curso'}</button>
+        `;
+
+        if (activeIndex < modules.length - 1) {
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                activeIndex += 1;
+                updateLesson();
+                saveProgress();
+            });
+        } else {
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                saveProgress();
+                showToast('Parabéns! Você concluiu o curso introdutório com sucesso! 🎉', 'success');
+                setTimeout(() => window.location = 'perfil.html', 2000);
+            });
+        }
+
+        const percentage = Math.round(((activeIndex + 1) / modules.length) * 100);
+        progressBar.style.width = `${percentage}%`;
+        progressText.textContent = `${percentage}%`;
+        renderModules();
+    }
+
+    function loadUserProgress(userId) {
+        getUserProgress(userId, 'intro-programacao').then(doc => {
+            if (doc.exists) {
+                const data = doc.data();
+                activeIndex = Math.max(0, data.completedLessons - 1);
+            }
+            renderModules();
+            updateLesson();
+        });
+    }
+
+    function saveProgress() {
+        if (currentUser) {
+            saveUserProgress(currentUser.uid, 'intro-programacao', 'Introdução à Programação', activeIndex + 1, modules.length)
+                .then(() => showToast('Progresso salvo automaticamente', 'info'))
+                .catch(err => showToast('Erro ao salvar: ' + err.message, 'error'));
+        }
+    }
+</script>
+
+<div id="toast" class="toast"></div>
+</body>
+</html>
