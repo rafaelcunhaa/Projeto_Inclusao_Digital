@@ -813,3 +813,185 @@ body.dark-mode form button {
 }
 
 
+
+/* Home refinements */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 12px;
+    background: #111827;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    z-index: 200;
+}
+
+.skip-link:focus {
+    top: 12px;
+}
+
+.active-link {
+    color: #fca311;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 28px;
+    min-height: 62vh;
+}
+
+.hero-text {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.hero-cta-group {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.6);
+    color: #fff;
+    box-shadow: none;
+}
+
+.hero-highlights {
+    width: min(980px, 100%);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.metric-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.metric-label {
+    color: #cbd5e1;
+}
+
+.auth {
+    padding: 50px 10%;
+    background: linear-gradient(135deg, #ffffff, #e2e8f0);
+}
+
+.auth .section-title {
+    text-align: center;
+}
+
+.auth-description {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 20px;
+    color: #334155;
+}
+
+.auth-info {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#logoutBtn {
+    margin-top: 14px;
+}
+
+.auth-panel {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.auth-form {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    width: 280px;
+}
+
+.auth-form input,
+.course-toolbar input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+.auth-form button {
+    width: 100%;
+}
+
+.course-toolbar {
+    max-width: 420px;
+    margin: 0 auto 28px;
+}
+
+.course-helper {
+    color: #64748b;
+    margin: -10px 0 20px;
+}
+
+.course-tag {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #fff4db;
+    color: #a16207;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.empty-courses {
+    color: #64748b;
+    margin-top: 8px;
+}
+
+body.dark-mode form h3 {
+    color: #f0f0f0;
+}
+
+body.dark-mode .auth-description,
+body.dark-mode .course-helper,
+body.dark-mode .empty-courses {
+    color: #cbd5e1;
+}
+
+body.dark-mode .course-tag {
+    background: #3f2f12;
+    color: #fcd34d;
+}
+
+@media (max-width: 860px) {
+    .hero {
+        min-height: auto;
+    }
+
+    .hero-highlights {
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+}
