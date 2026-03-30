@@ -2,104 +2,130 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plataforma de Inclusão Digital</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<a class="skip-link" href="#conteudoPrincipal">Pular para o conteúdo principal</a>
 
 <header>
     <div class="logo">Inclusão Digital</div>
     <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
-    <nav id="mainNav">
-        <a href="index.html">Início</a>
-        <a href="curso.html">Cursos</a>
-        <a href="sobre.html">Sobre</a>
-        <a href="rede_social.html">Rede Social</a>
-        <a href="perfil.html" id="perfilLink" style="display:none;">Meu Perfil</a>
-        <a href="login.html" id="entrarLink">Entrar</a>
+    <nav id="mainNav" aria-label="Menu principal">
+        <a href="index.html" data-route="index.html">Início</a>
+        <a href="curso.html" data-route="curso.html">Cursos</a>
+        <a href="sobre.html" data-route="sobre.html">Sobre</a>
+        <a href="rede_social.html" data-route="rede_social.html">Rede Social</a>
+        <a href="perfil.html" id="perfilLink" style="display:none;" data-route="perfil.html">Meu Perfil</a>
+        <a href="#authPanel" id="entrarLink">Entrar</a>
     </nav>
     <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
 </header>
 
-<section class="hero">
-    <div class="hero-text">
-        <h1>Educação Tecnológica para Todos</h1>
-        <p>Projeto alinhado aos ODS 4 e 9, promovendo capacitação e inovação em Itajaí.</p>
-        <a href="curso.html" class="btn">Começar Agora</a>
-    </div>
-</section>
+<main id="conteudoPrincipal">
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Educação Tecnológica para Todos</h1>
+            <p>Projeto alinhado aos ODS 4 e 9, promovendo capacitação, empregabilidade e inovação em Itajaí.</p>
+            <div class="hero-cta-group">
+                <a href="curso.html" class="btn">Começar Agora</a>
+                <a href="#authPanel" class="btn btn-secondary">Já tenho conta</a>
+            </div>
+        </div>
+        <div class="hero-highlights" aria-label="Indicadores da plataforma">
+            <article class="metric-card">
+                <span class="metric-number">+500</span>
+                <span class="metric-label">alunos impactados</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-number">5</span>
+                <span class="metric-label">trilhas gratuitas</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-number">100%</span>
+                <span class="metric-label">online e acessível</span>
+            </article>
+        </div>
+    </section>
 
-<section class="auth" style="padding: 50px 10%; background: linear-gradient(135deg, #ffffff, #e2e8f0);">
-    <h2 class="section-title">Acesse sua Conta</h2>
-    <p style="text-align:center; max-width:720px; margin: 0 auto 20px; color:#334155;">Cadastre-se e faça login para acompanhar seu progresso no curso e receber certificados.</p>
-    <div id="authInfo" style="display:none; text-align:center; margin-bottom: 24px;">
-        <strong>Bem-vindo, <span></span>, você está logado!</strong>
-        <br><a id="logoutBtn" href="#" class="btn" style="margin-top: 14px;">Sair</a>
-    </div>
-    <div id="authPanel" style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap;">
-        <form id="loginForm" style="background:white;padding:20px;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,0.08);width:280px;">
-            <h3>Login</h3>
-            <input type="email" name="email" placeholder="E-mail" required style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #cbd5e1;border-radius:8px;"/>
-            <input type="password" name="password" placeholder="Senha" required style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #cbd5e1;border-radius:8px;"/>
-            <button class="btn" style="width:100%;">Entrar</button>
+    <section class="auth">
+        <h2 class="section-title">Acesse sua Conta</h2>
+        <p class="auth-description">Cadastre-se e faça login para acompanhar seu progresso no curso e receber certificados.</p>
+        <div id="authInfo" class="auth-info" style="display:none;">
+            <strong>Bem-vindo, <span></span>, você está logado!</strong>
+            <br><a id="logoutBtn" href="#" class="btn">Sair</a>
+        </div>
+        <div id="authPanel" class="auth-panel">
+            <form id="loginForm" class="auth-form" aria-label="Formulário de login">
+                <h3>Login</h3>
+                <input type="email" name="email" placeholder="E-mail" autocomplete="email" required>
+                <input type="password" name="password" placeholder="Senha" autocomplete="current-password" required>
+                <button class="btn" type="submit">Entrar</button>
+            </form>
+            <form id="signupForm" class="auth-form" aria-label="Formulário de cadastro">
+                <h3>Criar Conta</h3>
+                <input type="email" name="email" placeholder="E-mail" autocomplete="email" required>
+                <input type="password" name="password" placeholder="Senha" autocomplete="new-password" required>
+                <button class="btn" type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="ods">
+        <div class="ods-card">
+            <h2>ODS 4</h2>
+            <p>Educação de qualidade através de cursos gratuitos e acessíveis.</p>
+        </div>
+        <div class="ods-card">
+            <h2>ODS 9</h2>
+            <p>Inovação e infraestrutura digital para desenvolvimento social.</p>
+        </div>
+    </section>
+
+    <section class="cursos">
+        <h2 class="section-title">Nossos Cursos Gratuitos</h2>
+        <p class="course-helper">Filtre por tema para encontrar a trilha ideal para você.</p>
+        <div class="course-toolbar">
+            <input type="search" id="courseSearch" placeholder="Buscar curso por nome ou tema" aria-label="Buscar curso">
+        </div>
+        <div class="cards" id="coursesContainer"></div>
+        <p id="emptyCoursesMessage" class="empty-courses" hidden>Nenhum curso encontrado para o filtro informado.</p>
+    </section>
+
+    <section class="benefits">
+        <article class="benefit-card">
+            <h3>Plataforma 100% gratuita</h3>
+            <p>Acesso total sem pagamento, com certificado digital ao final do curso.</p>
+        </article>
+        <article class="benefit-card">
+            <h3>Trilhas de aprendizado</h3>
+            <p>Cursos divididos em níveis básico, intermediário e avançado para evolução contínua.</p>
+        </article>
+        <article class="benefit-card">
+            <h3>Projetos reais</h3>
+            <p>Aulas baseadas em projetos para formar desenvolvedores prontos para mercado.</p>
+        </article>
+        <article class="benefit-card">
+            <h3>Mentorias ao vivo</h3>
+            <p>Interaja com instrutores em lives semanais e suporte por fórum.</p>
+        </article>
+    </section>
+
+    <section class="testimonials">
+        <h2 class="section-title">Depoimentos</h2>
+        <div class="testimonials-grid" id="testimonialsContainer"></div>
+    </section>
+
+    <section class="newsletter">
+        <h2>Fique por dentro das novidades</h2>
+        <p>Receba alertas de novos cursos e oportunidades diretamente por e-mail.</p>
+        <form id="newsletterForm">
+            <input type="email" id="newsletterEmail" placeholder="seu-email@exemplo.com" required>
+            <button type="submit">Quero receber</button>
         </form>
-        <form id="signupForm" style="background:white;padding:20px;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,0.08);width:280px;">
-            <h3>Criar Conta</h3>
-            <input type="email" name="email" placeholder="E-mail" required style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #cbd5e1;border-radius:8px;"/>
-            <input type="password" name="password" placeholder="Senha" required style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #cbd5e1;border-radius:8px;"/>
-            <button class="btn" style="width:100%;">Cadastrar</button>
-        </form>
-    </div>
-</section>
-
-<section class="ods">
-    <div class="ods-card">
-        <h2>ODS 4</h2>
-        <p>Educação de qualidade através de cursos gratuitos e acessíveis.</p>
-    </div>
-    <div class="ods-card">
-        <h2>ODS 9</h2>
-        <p>Inovação e infraestrutura digital para desenvolvimento social.</p>
-    </div>
-</section>
-
-<section class="cursos">
-    <h2 class="section-title">Nossos Cursos Gratuitos</h2>
-    <div class="cards" id="coursesContainer"></div>
-</section>
-
-<section class="benefits">
-    <article class="benefit-card">
-        <h3>Plataforma 100% gratuita</h3>
-        <p>Acesso total sem pagamento, com certificado digital ao final do curso.</p>
-    </article>
-    <article class="benefit-card">
-        <h3>Trilhas de aprendizado</h3>
-        <p>Cursos divididos em níveis básico, intermediário e avançado para evolução contínua.</p>
-    </article>
-    <article class="benefit-card">
-        <h3>Projetos reais</h3>
-        <p>Aulas baseadas em projetos para formar desenvolvedores prontos para mercado.</p>
-    </article>
-    <article class="benefit-card">
-        <h3>Mentorias ao vivo</h3>
-        <p>Interaja com instrutores em lives semanais e suporte por fórum.</p>
-    </article>
-</section>
-
-<section class="testimonials">
-    <h2 class="section-title">Depoimentos</h2>
-    <div class="testimonials-grid" id="testimonialsContainer"></div>
-</section>
-
-<section class="newsletter">
-    <h2>Fique por dentro das novidades</h2>
-    <p>Receba alertas de novos cursos e oportunidades diretamente por e-mail.</p>
-    <form id="newsletterForm">
-        <input type="email" id="newsletterEmail" placeholder="seu-email@exemplo.com" required>
-        <button type="submit">Quero receber</button>
-    </form>
-</section>
+    </section>
+</main>
 
 <footer>
     <p>Projeto de Extensão - Tecnologia para um Futuro Sustentável</p>
@@ -116,7 +142,6 @@
     const mainNav = document.getElementById('mainNav');
     menuToggle.addEventListener('click', () => mainNav.classList.toggle('show'));
 
-    // Dark Mode Toggle
     const themeToggle = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
     if (savedTheme === 'dark') {
@@ -129,22 +154,46 @@
         themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
     });
 
+    const currentRoute = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('#mainNav a[data-route]').forEach((link) => {
+        if (link.dataset.route === currentRoute) {
+            link.classList.add('active-link');
+        }
+    });
+
     const courses = [
-        { title: 'Informática Básica', description: 'Fundamentos de Windows, arquivos, internet, edição de texto e planilhas.', url: 'curso.html' },
-        { title: 'Introdução à Programação', description: 'Pensamento lógico, algoritmos, JavaScript básico e projeto prático.', url: 'curso.html' },
-        { title: 'Internet e Segurança', description: 'Práticas de navegação segura, proteção de dados e análise de golpes.', url: 'curso.html' },
-        { title: 'Web Full Stack', description: 'HTML, CSS, JavaScript, Node.js e deployment para iniciar sua carreira.', url: 'curso.html' },
-        { title: 'UX/UI para Iniciantes', description: 'Design de interfaces com foco na experiência do usuário e acessibilidade.', url: 'curso.html' }
+        { title: 'Informática Básica', description: 'Fundamentos de Windows, arquivos, internet, edição de texto e planilhas.', tag: 'Iniciante', url: 'curso.html' },
+        { title: 'Introdução à Programação', description: 'Pensamento lógico, algoritmos, JavaScript básico e projeto prático.', tag: 'Programação', url: 'curso.html' },
+        { title: 'Internet e Segurança', description: 'Práticas de navegação segura, proteção de dados e análise de golpes.', tag: 'Segurança', url: 'curso.html' },
+        { title: 'Web Full Stack', description: 'HTML, CSS, JavaScript, Node.js e deployment para iniciar sua carreira.', tag: 'Carreira', url: 'curso.html' },
+        { title: 'UX/UI para Iniciantes', description: 'Design de interfaces com foco na experiência do usuário e acessibilidade.', tag: 'Design', url: 'curso.html' }
     ];
 
     const coursesContainer = document.getElementById('coursesContainer');
-    coursesContainer.innerHTML = courses.map((course, index) => `
-        <div class="card" style="animation: appear 0.8s ease ${(index / 10 + 0.1)}s both;">
-            <h3>${course.title}</h3>
-            <p>${course.description}</p>
-            <a href="${course.url}" class="btn-curso">Acessar Curso</a>
-        </div>
-    `).join('');
+    const courseSearch = document.getElementById('courseSearch');
+    const emptyCoursesMessage = document.getElementById('emptyCoursesMessage');
+
+    function renderCourses(filter = '') {
+        const normalizedFilter = filter.trim().toLowerCase();
+        const filteredCourses = courses.filter((course) => {
+            const content = `${course.title} ${course.description} ${course.tag}`.toLowerCase();
+            return content.includes(normalizedFilter);
+        });
+
+        coursesContainer.innerHTML = filteredCourses.map((course, index) => `
+            <article class="card" style="animation: appear 0.8s ease ${(index / 10 + 0.1)}s both;">
+                <span class="course-tag">${course.tag}</span>
+                <h3>${course.title}</h3>
+                <p>${course.description}</p>
+                <a href="${course.url}" class="btn-curso">Acessar Curso</a>
+            </article>
+        `).join('');
+
+        emptyCoursesMessage.hidden = filteredCourses.length > 0;
+    }
+
+    renderCourses();
+    courseSearch.addEventListener('input', (event) => renderCourses(event.target.value));
 
     const testimonials = [
         { text: 'O curso mudou minha vida: do zero até deploy em aplicações reais.', author: 'Mariana, Itajaí' },
@@ -195,7 +244,6 @@
 
     onAuthStateChanged(updateAuthUI);
 
-    // Sincronizar mudanças de autenticação (para localStorage fallback)
     window.addEventListener('authChanged', () => {
         const loggedUser = localStorage.getItem('loggedInUser');
         const user = loggedUser ? { uid: loggedUser, email: loggedUser } : null;
