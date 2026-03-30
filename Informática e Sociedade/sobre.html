@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Sobre - Plataforma de Inclusão Digital</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">Inclusão Digital</div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+    <nav id="mainNav">
+        <a href="index.html">Início</a>
+        <a href="curso.html">Cursos</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="rede_social.html">Rede Social</a>
+        <a href="login.html">Entrar</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
+</header>
+
+<section class="hero">
+    <div class="hero-text">
+        <h1>Sobre o Projeto Inclusão Digital</h1>
+        <p>Um projeto de extensão universitária dedicado a promover a inclusão digital e educacional em Itajaí, alinhado aos Objetivos de Desenvolvimento Sustentável (ODS) da ONU.</p>
+    </div>
+</section>
+
+<section class="ods">
+    <div class="ods-card">
+        <h2>ODS 4 - Educação de Qualidade</h2>
+        <p>Oferecemos cursos gratuitos e acessíveis para capacitar indivíduos em habilidades digitais essenciais, promovendo uma educação inclusiva e equitativa.</p>
+    </div>
+    <div class="ods-card">
+        <h2>ODS 9 - Indústria, Inovação e Infraestrutura</h2>
+        <p>Desenvolvemos infraestrutura digital e incentivamos a inovação tecnológica para impulsionar o desenvolvimento sustentável e social.</p>
+    </div>
+</section>
+
+<section class="sobre-projeto">
+    <h2>Nossa Missão</h2>
+    <p>O Projeto Inclusão Digital visa reduzir a exclusão digital em comunidades vulneráveis, oferecendo formação em informática básica, programação e segurança na internet. Através de parcerias com instituições locais, buscamos criar um impacto positivo e duradouro.</p>
+    <h2>Objetivos</h2>
+    <ul>
+        <li>Promover a conscientização sobre programação e tecnologia.</li>
+        <li>Fomentar a inovação através de projetos práticos de programação.</li>
+    </ul>
+    <h2>Equipe</h2>
+    <p>Estudantes e professores do curso de Ciência da Computação da UNIVALI, comprometidos com a transformação social através da tecnologia.</p>
+</section>
+
+<footer>
+    <p>Projeto de Extensão - Tecnologia para um Futuro Sustentável</p>
+</footer>
+
+<script src="notifications.js"></script>
+
+<script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    menuToggle.addEventListener('click', () => mainNav.classList.toggle('show'));
+
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = '☀️';
+    }
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+</script>
+
+<div id="toast" class="toast"></div>
+</body>
+</html>
